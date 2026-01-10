@@ -29,7 +29,6 @@ const Transactions = () => {
 
     if (editingId) {
       result = updateTransaction(editingId, input)
-      setEditingId(null);
     }
     else {
       result = addTransaction(input);
@@ -40,11 +39,13 @@ const Transactions = () => {
       return;
     }
 
+    setEditingId(null);
     console.log(result);
     
 
     setType("expense");
     setAmount("");
+    setCategoryId(null);
     setDate("");
     setNote("");
     setError(null);
@@ -54,6 +55,7 @@ const Transactions = () => {
     setEditingId(tx.id);
     setType(tx.type);
     setAmount(tx.amount);
+    setCategoryId(tx.categoryId ?? null);
     setDate(tx.date);
     setNote(tx.note || "");
   }
@@ -89,8 +91,6 @@ const Transactions = () => {
 
 
         {error && <p style={{ color: "red" }}>{error}</p>}
-
-
       </form>
 
       <hr />
