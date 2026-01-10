@@ -1,6 +1,6 @@
 export function validateTransaction({ type, amount, categoryId = null, date, note = "" }) {
 
-    if (!type || (type !== "income" && type !== "expanse"))
+    if (!type || (type !== "income" && type !== "expense"))
     {
         return {
             isValid: false,
@@ -43,7 +43,7 @@ export function validateTransaction({ type, amount, categoryId = null, date, not
         }
     }
     
-    if (categoryId !== null || categoryId !== undefined || typeof categoryId !== "string")
+    if (categoryId !== null && categoryId !== undefined && typeof categoryId !== "string")
     {
         return {
             isValid: false,
@@ -51,7 +51,7 @@ export function validateTransaction({ type, amount, categoryId = null, date, not
         }
     }
     
-    if (note !== undefined || typeof note !== "string")
+    if (note !== undefined && typeof note !== "string")
     {
         return {
             isValid: false,

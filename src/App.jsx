@@ -1,6 +1,10 @@
+import Transactions from "./pages/Transactions"
+
 const App = () => {
   return (
-    <div>App</div>
+    <div>
+      <Transactions />
+    </div>
   )
 }
 
