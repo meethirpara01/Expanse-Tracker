@@ -3,10 +3,11 @@ import { useAppData } from "../context/AppDataContext"
 
 const Transactions = () => {
 
-  const { transactions, addTransaction, deleteTransaction, updateTransaction } = useAppData();
+  const { transactions, categories, addTransaction, deleteTransaction, updateTransaction } = useAppData();
 
   const [type, setType] = useState("expense");
   const [amount, setAmount] = useState("");
+  const [categoryId, setCategoryId] = useState(null);
   const [date, setDate] = useState("");
   const [note, setNote] = useState("");
   const [error, setError] = useState(null);
@@ -19,6 +20,7 @@ const Transactions = () => {
     const input = {
       type,
       amount: Number(amount),
+      categoryId,
       date,
       note
     };
@@ -38,6 +40,8 @@ const Transactions = () => {
       return;
     }
 
+    console.log(result);
+    
 
     setType("expense");
     setAmount("");
@@ -65,6 +69,17 @@ const Transactions = () => {
         </select>
 
         <input type="number" value={amount} onChange={(e) => { setAmount(e.target.value) }} placeholder="Amount" />
+        <select
+          value={categoryId || ""}
+          onChange={(e) => setCategoryId(e.target.value || null)}
+        >
+          <option value="">Uncategorized</option>
+          {categories.map(cat => (
+            <option key={cat.id} value={cat.id}>
+              {cat.name}
+            </option>
+          ))}
+        </select>
         <input type="date" value={date} onChange={(e) => { setDate(e.target.value) }} />
         <input type="text" value={note} onChange={(e) => { setNote(e.target.value) }} />
 
@@ -82,13 +97,13 @@ const Transactions = () => {
 
       <ul>
         {transactions.map(tx => (
-            <li key={tx.id}>
-              <strong>{tx.type}</strong> — ₹{tx.amount} — {tx.date}
-              {tx.note && ` (${tx.note})`}
-              <button onClick={() => handleEdit(tx)}>Edit</button>
-              <button onClick={() => deleteTransaction(tx.id)}>Delete</button>
-            </li>
-          ))}
+          <li key={tx.id}>
+            <strong>{tx.type}</strong> — ₹{tx.amount} — {tx.date}
+            {tx.note && ` (${tx.note})`}
+            <button onClick={() => handleEdit(tx)}>Edit</button>
+            <button onClick={() => deleteTransaction(tx.id)}>Delete</button>
+          </li>
+        ))}
       </ul>
     </div>
   )
