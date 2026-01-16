@@ -3,12 +3,15 @@ import { addTransaction as addTX } from "../logic/Transactions/TransactionAction
 import { deleteTransaction as deleteTX } from "../logic/Transactions/TransactionActions";
 import { updateTransaction as updateTX } from "../logic/Transactions/TransactionActions";
 import { addCategory as addCat } from "../logic/categories/categoryActions";
+import { upsertBudget } from "../logic/Budgets/BudgetActions";
 
 const AppDataContext = createContext(null);
 
 export function AppDataProvider({ children }) {
     const [transactions, setTransactions] = useState([]);
     const [categories, setCategories] = useState([]);
+    const [budgets, setBudgets] = useState([]);
+
 
 
     // LOAD FROM LOCAL STORAGE - TRANSACTIONS
@@ -45,6 +48,24 @@ export function AppDataProvider({ children }) {
     useEffect(() => {
         localStorage.setItem("expense_tracker_categories", JSON.stringify(categories));
     }, [categories]);
+
+
+    // LOAD FROM LOCAL STORAGE - BUDGETS
+    useEffect(() => {
+        const stored = localStorage.getItem("expense_tracker_budgets");
+        if (stored) {
+            setBudgets(JSON.parse(stored));
+        }
+    }, []);
+
+    // SYNC WITH LOCAL STORAGE - BUDGETS
+    useEffect(() => {
+        localStorage.setItem(
+            "expense_tracker_budgets",
+            JSON.stringify(budgets)
+        );
+    }, [budgets]);
+
 
 
     // TRANSACTIONS
@@ -86,8 +107,19 @@ export function AppDataProvider({ children }) {
         return result;
     }
 
+
+    // BUDGETS
+    function setBudget(input) {
+        const result = upsertBudget(budgets, input);
+        if (result.success) {
+            setBudgets(result.data);
+        }
+        return result;
+    }
+
+
     return (
-        <AppDataContext.Provider value={{ transactions, categories, addTransaction, deleteTransaction, updateTransaction, addCategory }} >
+        <AppDataContext.Provider value={{ transactions, categories, budgets, addTransaction, deleteTransaction, updateTransaction, addCategory, setBudget }} >
             {children}
         </AppDataContext.Provider>
     );
