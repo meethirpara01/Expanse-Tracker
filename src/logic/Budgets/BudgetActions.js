@@ -10,23 +10,23 @@ export function upsertBudget(budgets, input) {
         };
     }
 
-    const existing = budgets.find(b => {
+    const existing = budgets.find(b => 
         b.month === input.month &&
         b.year === input.year &&
         b.categoryId === input.categoryId
-    })
+    )
 
     if (existing) {
-        const updatedBudgets = budgets.map(b => {
-            b.id == existing.id ? { ...b, limit: input.limit} : b
-        });
+        const updatedBudgets = budgets.map(b => 
+            b.id === existing.id ? { ...b, limit: input.limit} : b
+        );
 
         return {
             success: true,
             data: updatedBudgets
         };
     }
-
+ 
     const newBudget = createBudget(input);
     return {
         success: true,

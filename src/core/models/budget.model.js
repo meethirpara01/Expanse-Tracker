@@ -8,4 +8,4 @@ export function createBudget({ month, year, categoryId = null, limit })
         limit,
         createdAt: new Date().toISOString()
     };
-};  
+};
